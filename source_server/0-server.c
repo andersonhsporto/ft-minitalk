@@ -2,6 +2,6 @@
 
 int	main(void)
 {
-	printf("TESTE\n");
+	ft_printf("TESTE\n");
 	return (0);
 }

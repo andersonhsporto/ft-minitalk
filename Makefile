@@ -9,10 +9,10 @@ INCLUDE =	-I ./include
 
 HEADER	= ./include/minitalk.h
 
-LIBFT	= -L ./ft-printf/ -ntf
+PRINTF	= ./ft-printf/libftprintf.a
 
 SRC		=		$(addprefix ./source_client/, \
-		0-client.c \
+		0-client.c 1-inspect.c \
 )
 
 SRC_S	=		$(addprefix ./source_server/, \
@@ -30,13 +30,13 @@ all: $(NAME) $(NAME_S)
 $(NAME): $(HEADER) $(OBJ)
 	make all -C ./ft-printf/
 	rm -rf $(NAME)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(PRINTF) -o $(NAME)
 
 
 $(NAME_S): $(HEADER) $(OBJ_S)
 	make all -C ./ft-printf/
 	rm -rf $(NAME_S)
-	$(CC) $(CFLAGS) $(OBJ_S) $(LIBFT) -o $(NAME_S)
+	$(CC) $(CFLAGS) $(OBJ_S) $(PRINTF) -o $(NAME_S)
 
 
 clean:
