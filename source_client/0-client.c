@@ -1,7 +1,10 @@
 #include "minitalk.h"
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	printf("TESTE\n");
-	return (0);
+	if (inspect_args(argc, argv))
+	{
+		
+	}
+	return (EXIT_FAILURE);
 }
