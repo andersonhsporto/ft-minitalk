@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0-client.c                                         :+:      :+:    :+:   */
+/*   2-pickup.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/17 14:14:09 by anhigo-s          #+#    #+#             */
-/*   Updated: 2022/03/17 15:43:17 by anhigo-s         ###   ########.fr       */
+/*   Created: 2022/03/17 14:41:56 by anhigo-s          #+#    #+#             */
+/*   Updated: 2022/03/17 15:42:29 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-int	main(int argc, char **argv)
+void	reset_data(void)
 {
-	if (inspect_args(argc, argv))
+	g_data.i = 0;
+	g_data.x = 0;
+	g_data.client_pid = 0;
+}
+
+void	pick(int sig, siginfo_t *data, void *pointer __attribute__((unused)))
+{
+	sig -= SIGUSR1;
+	if (g_data.client_pid != data->si_pid)
+		reset_data();
+	g_data.x = g_data.x << 1 | sig;
+	g_data.i++;
+	if (g_data.i == 8)
 	{
-		init_message(argv);
-		return (EXIT_SUCCESS);
+		write(1, &g_data.x, 1);
+		reset_data();
 	}
-	return (EXIT_FAILURE);
+	g_data.client_pid = data->si_pid;
 }

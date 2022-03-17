@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0-client.c                                         :+:      :+:    :+:   */
+/*   1-signal.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/17 14:14:09 by anhigo-s          #+#    #+#             */
-/*   Updated: 2022/03/17 15:43:17 by anhigo-s         ###   ########.fr       */
+/*   Created: 2022/03/17 15:17:56 by anhigo-s          #+#    #+#             */
+/*   Updated: 2022/03/17 15:32:10 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-int	main(int argc, char **argv)
+void	start_signals(void)
 {
-	if (inspect_args(argc, argv))
-	{
-		init_message(argv);
-		return (EXIT_SUCCESS);
-	}
-	return (EXIT_FAILURE);
+	struct sigaction	talk;
+
+	talk.sa_sigaction = &pick;
+	talk.sa_flags = SA_SIGINFO;
+	sigemptyset(&talk.sa_mask);
+	sigaddset(&talk.sa_mask, SIGUSR1);
+	sigaddset(&talk.sa_mask, SIGUSR2);
+	sigaction(SIGUSR1, &talk, NULL);
+	sigaction(SIGUSR2, &talk, NULL);
+	while (true)
+		sleep(1);
+	return ;
 }

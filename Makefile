@@ -12,11 +12,11 @@ HEADER	= ./include/minitalk.h
 PRINTF	= ./ft-printf/libftprintf.a
 
 SRC		=		$(addprefix ./source_client/, \
-		0-client.c 1-inspect.c \
+		0-client.c 1-inspect.c 3-message.c \
 )
 
 SRC_S	=		$(addprefix ./source_server/, \
-		0-server.c \
+		0-server.c 1-signal.c 2-pickup.c \
 )
 
 .c.o:
