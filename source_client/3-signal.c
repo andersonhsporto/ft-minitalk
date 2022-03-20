@@ -6,7 +6,7 @@
 /*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/20 03:24:45 by anhigo-s          #+#    #+#             */
-/*   Updated: 2022/03/20 03:25:21 by anhigo-s         ###   ########.fr       */
+/*   Updated: 2022/03/20 03:51:38 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_message(char **argv)
 		pause();
 }
 
-static  void	handler_sigusr(int signum)
+static void	handler_sigusr(int signum)
 {
 	int	end;
 
