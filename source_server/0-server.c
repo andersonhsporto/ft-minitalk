@@ -6,13 +6,11 @@
 /*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 14:18:05 by anhigo-s          #+#    #+#             */
-/*   Updated: 2022/03/17 15:42:40 by anhigo-s         ###   ########.fr       */
+/*   Updated: 2022/03/20 03:22:54 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-t_data g_data;
 
 int	main(void)
 {

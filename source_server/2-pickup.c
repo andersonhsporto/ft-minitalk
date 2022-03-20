@@ -6,30 +6,54 @@
 /*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 14:41:56 by anhigo-s          #+#    #+#             */
-/*   Updated: 2022/03/17 15:42:29 by anhigo-s         ###   ########.fr       */
+/*   Updated: 2022/03/20 03:22:03 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	reset_data(void)
+static char	*print_free(char *message);
+static char	*print_error(int pid, char *str);
+
+void	pickup_handler(int signum, siginfo_t *info, void *context)
 {
-	g_data.i = 0;
-	g_data.x = 0;
-	g_data.client_pid = 0;
+	static char	c = 0xFF;
+	static char	*message = 0;
+	static int	bits = 0;
+	static int	pid = 0;
+
+	(void)context;
+	if (info->si_pid)
+		pid = info->si_pid;
+	if (signum == SIGUSR1)
+		c ^= 0x80 >> bits;
+	else if (signum == SIGUSR2)
+		c |= 0x80 >> bits;
+	if (++bits == 8)
+	{
+		if (c)
+			message = add_char(message, c);
+		else
+			message = print_free(message);
+		bits = 0;
+		c = 0xFF;
+	}
+	if (kill(pid, SIGUSR1) == -1)
+		print_error(pid, message);
 }
 
-void	pick(int sig, siginfo_t *data, void *pointer __attribute__((unused)))
+static char	*print_free(char *message)
 {
-	sig -= SIGUSR1;
-	if (g_data.client_pid != data->si_pid)
-		reset_data();
-	g_data.x = g_data.x << 1 | sig;
-	g_data.i++;
-	if (g_data.i == 8)
-	{
-		write(1, &g_data.x, 1);
-		reset_data();
-	}
-	g_data.client_pid = data->si_pid;
+	ft_printf("%s\n", message);
+	free(message);
+	return (NULL);
+}
+
+static char	*print_error(int pid, char *str)
+{
+	if (str)
+		free(str);
+	ft_printf("minitalk: server error");
+	kill(pid, SIGUSR2);
+	exit(EXIT_FAILURE);
 }

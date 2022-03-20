@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   1-signal.c                                         :+:      :+:    :+:   */
+/*   3-signal.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/17 15:17:56 by anhigo-s          #+#    #+#             */
-/*   Updated: 2022/03/20 03:17:03 by anhigo-s         ###   ########.fr       */
+/*   Created: 2022/03/20 03:24:45 by anhigo-s          #+#    #+#             */
+/*   Updated: 2022/03/20 03:25:21 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	start_signals(void)
-{
-	struct sigaction	sa_signal;
-	sigset_t			block_mask;
+static void	handler_sigusr(int signum);
 
-	sigemptyset(&block_mask);
-	sigaddset(&block_mask, SIGINT);
-	sigaddset(&block_mask, SIGQUIT);
-	sa_signal.sa_handler = 0;
-	sa_signal.sa_flags = SA_SIGINFO;
-	sa_signal.sa_mask = block_mask;
-	sa_signal.sa_sigaction = pickup_handler;
-	sigaction(SIGUSR1, &sa_signal, NULL);
-	sigaction(SIGUSR2, &sa_signal, NULL);
-	while (true)
+void	init_message(char **argv)
+{
+	signal(SIGUSR1, handler_sigusr);
+	signal(SIGUSR2, handler_sigusr);
+	send_bit(ft_atoi(argv[1]), argv[2]);
+	while (1)
 		pause();
+}
+
+static  void	handler_sigusr(int signum)
+{
+	int	end;
+
+	end = 0;
+	if (signum == SIGUSR1)
+		end = send_bit(0, 0);
+	else if (signum == SIGUSR2)
+		exit(EXIT_FAILURE);
+	if (end)
+		exit(EXIT_SUCCESS);
 }
